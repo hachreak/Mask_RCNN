@@ -1068,7 +1068,7 @@ def rpn_bbox_loss_graph(config, target_bbox, rpn_match, rpn_bbox):
                                    config.IMAGES_PER_GPU)
 
     loss = smooth_l1_loss(target_bbox, rpn_bbox)
-    
+
     loss = K.switch(tf.size(loss) > 0, K.mean(loss), tf.constant(0.0))
     return loss
 
@@ -2224,7 +2224,7 @@ class MaskRCNN():
             if not layer.weights:
                 continue
             # Is it trainable?
-            trainable = bool(re.fullmatch(layer_regex, layer.name))
+            trainable = bool(utils.fullmatch(layer_regex, layer.name))
             # Update layer. If layer is a container, update inner layer.
             if layer.__class__.__name__ == 'TimeDistributed':
                 layer.layer.trainable = trainable
@@ -2637,7 +2637,7 @@ class MaskRCNN():
         for p in parents:
             if p in checked:
                 continue
-            if bool(re.fullmatch(name, p.name)):
+            if bool(utils.fullmatch(name, p.name)):
                 return p
             checked.append(p)
             a = self.ancestor(p, name, checked)
