@@ -7,6 +7,8 @@ Licensed under the MIT License (see LICENSE for details)
 Written by Waleed Abdulla
 """
 
+from __future__ import division
+
 import os
 import random
 import datetime
@@ -2371,7 +2373,7 @@ class MaskRCNN():
             validation_steps=self.config.VALIDATION_STEPS,
             max_queue_size=100,
             workers=workers,
-            use_multiprocessing=True,
+            use_multiprocessing=True, verbose=1
         )
         self.epoch = max(self.epoch, epochs)
 
@@ -2453,7 +2455,7 @@ class MaskRCNN():
         ww = wx2 - wx1  # window width
         scale = np.array([wh, ww, wh, ww])
         # Convert boxes to normalized coordinates on the window
-        boxes = np.divide(boxes - shift, scale)
+        boxes = np.divide(boxes - shift, scale.astype(np.float32))
         # Convert boxes to pixel coordinates on the original image
         boxes = utils.denorm_boxes(boxes, original_image_shape[:2])
 
@@ -2848,7 +2850,7 @@ def norm_boxes_graph(boxes, shape):
     h, w = tf.split(tf.cast(shape, tf.float32), 2)
     scale = tf.concat([h, w, h, w], axis=-1) - tf.constant(1.0)
     shift = tf.constant([0., 0., 1., 1.])
-    return tf.divide(boxes - shift, scale)
+    return tf.divide(boxes - shift, scale.astype(np.float32))
 
 
 def denorm_boxes_graph(boxes, shape):

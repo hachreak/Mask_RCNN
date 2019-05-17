@@ -7,6 +7,8 @@ Licensed under the MIT License (see LICENSE for details)
 Written by Waleed Abdulla
 """
 
+from __future__ import division
+
 import logging
 import random
 import numpy as np
@@ -444,6 +446,7 @@ def resize_image(image, min_dim=None, max_dim=None, min_scale=None, mode="square
     if max_dim and mode == "square":
         image_max = max(h, w)
         if round(image_max * scale) > max_dim:
+            # FIXME
             scale = max_dim / float(image_max)
 
     # Resize image using bilinear interpolation
@@ -866,7 +869,7 @@ def norm_boxes(boxes, shape):
         [N, (y1, x1, y2, x2)] in normalized coordinates
     """
     h, w = shape
-    scale = np.array([h - 1, w - 1, h - 1, w - 1])
+    scale = np.array([h - 1, w - 1, h - 1, w - 1]).astype(np.float32)
     shift = np.array([0, 0, 1, 1])
     return np.divide((boxes - shift), scale).astype(np.float32)
 
