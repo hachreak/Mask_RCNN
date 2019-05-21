@@ -217,6 +217,7 @@ def apply_box_deltas_graph(boxes, deltas):
     boxes: [N, (y1, x1, y2, x2)] boxes to update
     deltas: [N, (dy, dx, log(dh), log(dw))] refinements to apply
     """
+    boxes = tf.cast(boxes, tf.float32)
     # Convert to y, x, h, w
     height = boxes[:, 2] - boxes[:, 0]
     width = boxes[:, 3] - boxes[:, 1]
